@@ -17,13 +17,15 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'agabunai96@gmail.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('papua,123'),
-            'is_admin' => true,
-            'email_verified_at' => now(),
-        ]);
+        User::firstOrCreate(
+            ['email' => 'agabunai96@gmail.com'],
+            [
+                'name' => 'Admin',
+                'password' => \Illuminate\Support\Facades\Hash::make('papua,123'),
+                'is_admin' => true,
+                'email_verified_at' => now(),
+            ]
+        );
 
         $this->call([
             PortfolioSeeder::class,

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Blog - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-slate-900 text-white p-6">
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold">Admin Panel</h1>
+                <p class="text-slate-400 text-sm">Jasa Web & Android</p>
+            </div>
+            
+            <nav class="space-y-2">
+                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800 transition">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5 inline mr-2"></i> Dashboard
+                </a>
+                <a href="{{ route('admin.portfolios.index') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800 transition">
+                    <i data-lucide="briefcase" class="w-5 h-5 inline mr-2"></i> Portfolio
+                </a>
+                <a href="{{ route('admin.blogs.index') }}" class="block px-4 py-2 rounded-lg bg-indigo-600 font-semibold">
+                    <i data-lucide="newspaper" class="w-5 h-5 inline mr-2"></i> Blog
+                </a>
+                <a href="{{ route('admin.testimonials.index') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800 transition">
+                    <i data-lucide="star" class="w-5 h-5 inline mr-2"></i> Testimonial
+                </a>
+            </nav>
+
+            <div class="mt-auto pt-8 border-t border-slate-700">
+                <a href="/" class="block px-4 py-2 rounded-lg hover:bg-slate-800 transition text-slate-400">
+                    <i data-lucide="arrow-left" class="w-5 h-5 inline mr-2"></i> Kembali
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <h2 class="text-3xl font-bold text-slate-900 mb-8">Edit Blog</h2>
+
+            <div class="bg-white rounded-lg shadow p-6 max-w-2xl">
+                @if ($errors->any())
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form action="{{ route('admin.blogs.update', $blog) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                    @csrf
+                    @method('PUT')
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-900 mb-2">Judul Blog</label>
+                        <input type="text" name="title" value="{{ $blog->title }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-indigo-600" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-900 mb-2">Author</label>
+                        <input type="text" name="author" value="{{ $blog->author }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-indigo-600" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-900 mb-2">Excerpt (Ringkasan)</label>
+                        <textarea name="excerpt" rows="3" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-indigo-600" required>{{ $blog->excerpt }}</textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-900 mb-2">Konten</label>
+                        <textarea name="content" rows="8" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-indigo-600" required>{{ $blog->content }}</textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-900 mb-2">Gambar (Opsional)</label>
+                        @if ($blog->image)
+                            <div class="mb-3">
+                                <img src="{{ Storage::url($blog->image) }}" alt="{{ $blog->title }}" class="w-full max-w-xs rounded-lg">
+                            </div>
+                        @endif
+                        <input type="file" name="image" class="w-full px-4 py-2 border rounded-lg" accept="image/*">
+                        <p class="text-xs text-slate-500 mt-1">JPG, PNG, GIF max 2MB</p>
+                    </div>
+
+                    <div class="flex gap-4 pt-4">
+                        <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 font-semibold">
+                            Update Blog
+                        </button>
+                        <a href="{{ route('admin.blogs.index') }}" class="bg-slate-300 text-slate-900 px-6 py-2 rounded-lg hover:bg-slate-400 font-semibold">
+                            Batal
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
